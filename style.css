@@ -39,14 +39,14 @@ html,body {
     color: black;
 }
 
-#post_own_recipies {
+#post_own_recipes {
     background-image: url("Images/fruits.jpg");
     background-position: 0% 25%;
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-#ingrediant_finder {
+#ingredient_finder {
     padding-top: 25px;
     background-image: url("Images/ingrediants.jpg");
     background-position: 0% 25%;
@@ -54,7 +54,12 @@ html,body {
     background-repeat: no-repeat;
 }
 
-#all_recipies {
+#all_recipes {
+    color: black;
+    padding-left: 25px;
+}
+
+#all_posts {
     color: black;
 }
 
@@ -68,6 +73,10 @@ html,body {
     color: black
 }
 
+
+#ingredient_search {
+    color: black;
+}
 
 #recipe_submit {
     color: black;

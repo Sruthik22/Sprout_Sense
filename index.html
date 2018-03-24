@@ -20,10 +20,10 @@
 	<script type="text/javascript">
 
 		$(document).ready(function(){
-			document.getElementById("button_submit").onclick = search_api;
-   			document.getElementById("recipie_submit").onclick = add_recipie_to_storage;
+			document.getElementById("ingredient_search").onclick = search_api;
+   			document.getElementById("recipe_submit").onclick = add_recipe_to_storage;
 
-   			add_post();
+   			add_all_post();
 		});
         
 		function search_api() {
@@ -32,66 +32,70 @@
 
         	var element = document.createElement("div");
 
+        	console.log(name_of_food_searched)
+
+        	var html_all = ""
+
         	if (name_of_food_searched == 'pancakes') {
         		const html = `
 
-					<div class="jumbotron jumbotron-fluid" id = "all_recipies">
-						<p class="jumbotron-caption">1 1/2 cups all-purpose flour</p>
-						<p class="jumbotron-caption">3 1/2 teaspoons baking powder</p>
-						<p class="jumbotron-caption">1 teaspoon salt</p>
-        				<p class="jumbotron-caption">1 tablespoon white sugar</p>
-						<p class="jumbotron-caption">1 1/4 cups milk</p>
-						<p class="jumbotron-caption">1 egg</p>
-						<p class="jumbotron-caption">3 tablespoons butter, melted</p> 				
+					<div class="jumbotron jumbotron-fluid" id = "all_recipes">
+						<p class="jumbotron-caption" style="color: black;">1 1/2 cups all-purpose flour</p>
+						<p class="jumbotron-caption" style="color: black;">3 1/2 teaspoons baking powder</p>
+						<p class="jumbotron-caption" style="color: black;">1 teaspoon salt</p>
+        				<p class="jumbotron-caption" style="color: black;">1 tablespoon white sugar</p>
+						<p class="jumbotron-caption" style="color: black;">1 1/4 cups milk</p>
+						<p class="jumbotron-caption" style="color: black;">1 egg</p>
+						<p class="jumbotron-caption" style="color: black;">3 tablespoons butter, melted</p> 				
         			</div>
 				`
-
+				html_all = html;
         		
         	}
 
-        	html_all = html;
-        	$("#ingrediant_finder_search").append(html_all)
+        	
+        	$("#ingredient_finder_search").append(html_all)
         }
 
-        function add_recipie_to_storage() {
+        function add_recipe_to_storage() {
 
-        	var recipie_name = document.getElementById("recipie_name").value;
+        	var recipe_name = document.getElementById("recipe_name").value;
         	var ingredients = document.getElementById("Ingredients_names").value;
 
-        	var recipieArray = sessionStorage.getItem('recipies')
+        	var recipeArray = sessionStorage.getItem('recipes')
 
-        	console.log(recipieArray)
+        	console.log(recipeArray)
 
-			if (recipieArray == null) {
-        		recipieArray = []
+			if (recipeArray == null) {
+        		recipeArray = []
         	}
 
         	else {
-        		recipieArray = JSON.parse(recipieArray)
+        		recipeArray = JSON.parse(recipeArray)
         	}
 
-        	var recipie = {name: recipie_name, ingredients: ingredients}
+        	var recipe = {name: recipe_name, ingredients: ingredients}
 
-        	recipieArray.push(recipie)
+        	recipeArray.push(recipe)
 
-        	sessionStorage.setItem('recipies', JSON.stringify(recipieArray));
+        	sessionStorage.setItem('recipes', JSON.stringify(recipeArray));
 
         	add_post();
         }
 
-        function add_post() {
-        	var recipies_string = sessionStorage.getItem('recipies')
-        	var Recipies_arrays = JSON.parse(recipies_string)
+        function add_all_post() {
+        	var recipes_string = sessionStorage.getItem('recipes')
+        	var recipes_arrays = JSON.parse(recipes_string)
         	var html_all = ""
-        	Recipies_arrays.forEach (function(recipe){
+        	recipes_arrays.forEach (function(recipe){
         		// For each of the elements in the array we just need to create a new div with that information
   				//Create an input type dynamically.
 				var element = document.createElement("div");
 				const html = `
 
-					<div class="jumbotron jumbotron-fluid" id = "all_recipies">
-        				<p class="jumbotron-caption" id = "header">Name of Recipe: ${recipe.name}</p>
-        				<p class="jumbotron-caption">${recipe.ingredients}</p>
+					<div class="jumbotron jumbotron-fluid" id = "all_recipes">
+        				<p class="jumbotron-caption" id = "header" style="color: black;">Name of Recipe: ${recipe.name}</p>
+        				<p class="jumbotron-caption" id = "all_recipes">${recipe.ingredients}</p>
         			</p>
         			</div>
 				`
@@ -99,6 +103,32 @@
         	})
 
         	$("#all_posts").append(html_all)
+			
+			
+        }
+
+        function add_post() {
+        	var recipes_string = sessionStorage.getItem('recipes')
+        	var recipes_arrays = JSON.parse(recipes_string)
+
+        	var need_to_append = recipes_arrays[recipes_arrays.length - 1]
+
+        	var html_all = ""
+
+        		// For each of the elements in the array we just need to create a new div with that information
+  				//Create an input type dynamically.
+				var element = document.createElement("div");
+				const html = `
+
+					<div class="jumbotron jumbotron-fluid" id = "all_recipes">
+        				<p class="jumbotron-caption" id = "header" style="color: black;">Name of Recipe: ${recipe.name}</p>
+        				<p class="jumbotron-caption" id = "all_recipes">${recipe.ingredients}</p>
+        			</p>
+        			</div>
+				`
+				html_all += html;
+
+        	$("#all_posts").append(need_to_append)
 			
 			
         }
@@ -135,7 +165,7 @@
             </div> <!-- end container -->
         </div> <!-- end navbar -->
 
-        <div class="jumbotron jumbotron-fluid" id = "ingrediant_finder">
+        <div class="jumbotron jumbotron-fluid" id = "ingredient_finder">
         	<div class="container">
         		<p class="jumbotron-caption" id = "header">Ingredient Finder</p>
         		<p class="jumbotron-caption">Figure out what the common ingredients are in the food you're eating.</p>
@@ -144,20 +174,20 @@
 
         				Food Name: <input type="text" id = "food_name" name="food_name">
 
-        				<button type="submit" class="btn btn-outline-dark" id = "recipie_submit" value="Submit">SEARCH</button>
+        				<button type="submit" class="btn btn-outline-dark" id = "ingredient_search" value="Submit">SEARCH</button>
 
         			</p>
 
         	</div>
         </div>
 
-        <div class="jumbotron jumbotron-fluid" id = "ingrediant_finder_search">
+        <div class="jumbotron jumbotron-fluid" id = "ingredient_finder_search">
         	
         </div>
 
-        <div class="jumbotron jumbotron-fluid" id = "post_own_recipies">
+        <div class="jumbotron jumbotron-fluid" id = "post_own_recipes">
         	<div class="container">
-        		<p class="jumbotron-caption" id = "header">Post your own Recipies:</p>
+        		<p class="jumbotron-caption" id = "header">Post your own recipies:</p>
         		<p class="jumbotron-caption">Want to add your own recipe to the database.</p>
 
         			<p class="jumbotron-caption"> 
